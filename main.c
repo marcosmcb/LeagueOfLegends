@@ -54,4 +54,26 @@ arquivos de  ́ındices no disco a partir das estruturas da memória principal
 
 ********************************************/
 
+printf("----------Menu Princial----------");
+printf("\nSelecione uma das opções abaixo para realizar uma tarefa\n");
+printf("\n(1)Cadatro de partida");
+printf("\n(2)Alterar Duração de partida");
+printf("\n(3)Remover uma partida");
+printf("\n(4)Buscar uma partida");
+printf("\n(5)Listar partidas");
+printf("\n(6)Liberar espaços");
+printf("\n(7)Finalizar");
+
+
+printf("\nSub Menu de Busca de partida");
+printf("\n(1)Busca por código");
+printf("\n(2)Busca pelo nome da equipe vencedora");
+printf("\n(3)Busca por MVP da partida");
+
+
+printf("\nSub Menu de listagem de partida");
+printf("\n(1)Lista por código");
+printf("\n(2)Busca por Equipe vencedora");
+printf("\n(3)Busca por MVP da partida");
+
 
