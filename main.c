@@ -6,6 +6,8 @@ Prof. Tiago A. Almeida
 Autores:
         Marcos Cavalvante
         Yanick Oliveira Rossi 408646
+        
+                        MENU
 1-Cadastro    
 
 2-Alteração
@@ -17,7 +19,10 @@ Autores:
             2.por nome da equipe vencedora
             3. por apelido do MVP
 5-Listagem
-
+            1. por código(ordem lexicográfica)
+            2. por nome da equipe vencedora(ordem lexicográfica)
+            3. por apelido do MVP(ordem lexicográfica)
+            
 6-Liberar Espaço
 
 7-Finalizar
