@@ -27,6 +27,10 @@ Autores:
 
 7-Finalizar
 
+Implementação
+Implementar uma biblioteca de manipulaçãp de arquivos para o seu programa, contendo obriga-
+toriamente as seguintes funcionalidades:
+
 • Uma estrutura de dados para armazenar os  ́ındices na meḿoria principal;
 • Verificar se o arquivo de dados existe;
 • Verificar se o  ́ındice priḿario existe;
