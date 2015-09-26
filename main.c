@@ -1,4 +1,3 @@
-# LeagueOfLegends
 /*******************************************
 Trabalho 1 - Estrutura de Dados 2
             INDEXAÇÃO
@@ -9,11 +8,8 @@ Autores:
         
                         MENU
 1-Cadastro    
-
 2-Alteração
-
 3-Remoção
-
 4-Busca
             1. por código
             2.por nome da equipe vencedora
@@ -24,13 +20,10 @@ Autores:
             3. por apelido do MVP(ordem lexicográfica)
             
 6-Liberar Espaço
-
 7-Finalizar
-
 Implementação
 Implementar uma biblioteca de manipulaçãp de arquivos para o seu programa, contendo obriga-
 toriamente as seguintes funcionalidades:
-
 • Uma estrutura de dados para armazenar os  ́ındices na meḿoria principal;
 • Verificar se o arquivo de dados existe;
 • Verificar se o  ́ındice priḿario existe;
@@ -51,29 +44,207 @@ secund́arias.
 excluıdos, e atualizando os  ́ındices.
 • Atualizar todos os  ́ındices: dever ́a ser chamada ao finalizar o programa e dever ́a gravar os
 arquivos de  ́ındices no disco a partir das estruturas da memória principal
-
 ********************************************/
 
-printf("----------Menu Princial----------");
-printf("\nSelecione uma das opções abaixo para realizar uma tarefa\n");
-printf("\n(1)Cadatro de partida");
-printf("\n(2)Alterar Duração de partida");
-printf("\n(3)Remover uma partida");
-printf("\n(4)Buscar uma partida");
-printf("\n(5)Listar partidas");
-printf("\n(6)Liberar espaços");
-printf("\n(7)Finalizar");
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+#define DADOS_FILE "teste.dat"
+#define PRIMARY_FILE "iprimary.idx"
+#define WINNER_FILE "iwinner.idx"
+#define MVP_FILE "imvp.idx"
+#define MAX_REGISTRO 192
+
+typedef struct _matche{
+    
+    char codigo[9];
+    char equipeAzul[39];
+    char equipeVermelha[39];
+    char data[11];
+    char duracao[6];
+    char equipeVencedora[39];
+    char placarAzul[3];
+    char placarVermelha[3];
+    char apelidoMVP[39];
+
+}MATCHE;
+typedef struct _iprimary{
+	char codigo[9];
+	int rrn;
+}IPRIMARY;
+
+typedef struct _iwinner{
+	char iEquipeVencedora[39];
+	char codigo[9];
+}IWINNER;
+
+typedef struct _imvp{
+	char iMVP[39];
+	char codigo[9];
+
+}IMVP;
+
+void lerCaracteres(char str[],int n);
+void cadastrar(IPRIMARY **primaryList, IWINNER **winnerList, IMVP **mvpList);
+
+int main(void){
+
+	unsigned int opcMenu, opcSubMenu;
+	IPRIMARY *primary = NULL;
+	IWINNER *winner = NULL;
+	IMVP *mvp = NULL;
+    scanf("%u",&opcMenu);
+    while(opcMenu > 0 && opcMenu < 8){
+        printf("Valor Menu [%u] \n", opcMenu);
+        switch(opcMenu){
+            case 1:     
+                //cadastrar;
+                cadastrar(&primary, &winner, &mvp);
+                break;
+            case 2:
+                //alterar; 
+    
+                break;
+            case 3:
+                //remover;     
+                break;
+            case 4:     
+                //buscas;
+                printf("Submenu\n");
+                scanf("%u",&opcSubMenu);
+                printf("Valor SubMenu [%u] \n", opcSubMenu);
+
+                switch(opcSubMenu){
 
 
-printf("\nSub Menu de Busca de partida");
-printf("\n(1)Busca por código");
-printf("\n(2)Busca pelo nome da equipe vencedora");
-printf("\n(3)Busca por MVP da partida");
+                    case 1:  
+                        //buscaPorCodigo   
+                        break;
+                    case 2:  
+                        //buscaPorNomeEquipeVencedora   
+                        break;
+                    case 3:  
+                        //buscaPorMVP   
+                        break;
+                    default: printf("Entrada invalida\n");
+                }
+                
+                break;
+            case 5:     
+                //listagem;
+                printf("Submenu\n");
+                scanf("%u",&opcSubMenu);
+                printf("Valor SubMenu [%u] \n", opcSubMenu);
+
+                switch(opcSubMenu){
+                    printf("Valor SubMenu [%u] \n", opcSubMenu);
+                    case 1:  
+                        //buscaPorCodigo   
+                        break;
+                    case 2:  
+                        //buscaPorNomeEquipeVencedora   
+                        break;
+                    case 3:  
+                        //buscaPorMVP   
+                        break;
+                    default: printf("Entrada invalida\n");
+                }
 
 
-printf("\nSub Menu de listagem de partida");
-printf("\n(1)Lista por código");
-printf("\n(2)Busca por Equipe vencedora");
-printf("\n(3)Busca por MVP da partida");
+                break;
+            case 6:     
+                //liberar;
+                break;
+            case 7:     
+				return 0;
+                break;
+            default:    
+                printf("Entrada invalida\n");
+        }
+
+        scanf("%u",&opcMenu);
+    }
 
 
+
+
+
+
+	
+	return 0;
+}
+
+void cadastrar(IPRIMARY **primaryList, IWINNER **winnerList, IMVP **mvpList){
+	int bytes=0, i = 0,totalRegistros = 0;
+    FILE *matchesFile, *primaryFile;
+    MATCHE novaPartida;
+    matchesFile = fopen(DADOS_FILE, "a");
+
+    if(matchesFile == NULL) perror("Erro ao abrir o arquivo \n");
+    else printf("Arquivo aberto para leitura \n");
+
+	scanf("\n%[^\n]s",novaPartida.equipeAzul);
+	scanf("\n%[^\n]s",novaPartida.equipeVermelha);	
+	scanf("\n%[^\n]s",novaPartida.data);
+	scanf("\n%[^\n]s",novaPartida.duracao);
+	scanf("\n%[^\n]s",novaPartida.equipeVencedora);
+	scanf("\n%[^\n]s",novaPartida.placarAzul);
+	scanf("\n%[^\n]s",novaPartida.placarVermelha);	
+	scanf("\n%[^\n]s",novaPartida.apelidoMVP);
+
+
+    novaPartida.codigo[0] = novaPartida.equipeAzul[0];
+    novaPartida.codigo[1] = novaPartida.equipeVermelha[0];
+    novaPartida.codigo[2] = novaPartida.apelidoMVP[0];
+    novaPartida.codigo[3] = novaPartida.apelidoMVP[1];
+    novaPartida.codigo[4] = novaPartida.data[0];
+    novaPartida.codigo[5] = novaPartida.data[1];
+    novaPartida.codigo[6] = novaPartida.data[3];
+    novaPartida.codigo[7] = novaPartida.data[4];
+    novaPartida.codigo[8] = '\0';
+	
+	totalRegistros = ftell(matchesFile)/MAX_REGISTRO;
+	
+	*primaryList = (IPRIMARY*)realloc(*primaryList, sizeof(IPRIMARY) * totalRegistros);
+	*winnerList = (IWINNER*)realloc(*winnerList, sizeof(IWINNER) * totalRegistros);
+	*mvpList = (IMVP*)realloc(*mvpList, sizeof(IMVP) * totalRegistros);
+
+	
+
+	primaryFile = fopen(WINNER_FILE,"a+");
+
+	if(primaryFile == NULL) perror("Erro ao abrir o arquivo \n");
+    else printf("Arquivo aberto para leitura \n");
+	
+		
+
+	bytes = fprintf(matchesFile,"%s@%s@%s@%s@%s@%s@%s@%s@%s@",novaPartida.codigo,novaPartida.equipeAzul, novaPartida.equipeVermelha, novaPartida.data, novaPartida.duracao, novaPartida.equipeVencedora, novaPartida.placarAzul,novaPartida.placarVermelha,novaPartida.apelidoMVP);
+	
+	printf("bytes: %d",bytes);
+
+	for(i = 0; i < MAX_REGISTRO - bytes; i++)
+		fprintf(matchesFile, "#");
+	//printf("\nftell: %ld",ftell(matchesFile));
+
+	fclose(matchesFile);
+}
+
+
+
+/*
+int buscarPorCodigo(iprimary *lista, int total, char *codigo){
+    int i;
+    
+    //Percorre a lista de índices procurando pela chave *codigo;
+    for(i = 0; i < total; i++){
+        if(!strcmp(lista[i].chave, codigo))
+            return lista[i].pos;//Retorna RRN (que pode ser -1, indicando que o resgistro foi apagado).
+    }
+    
+    //Valor não encontrado.
+    return -1;
+}
+
+*/
