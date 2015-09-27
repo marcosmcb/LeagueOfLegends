@@ -86,7 +86,7 @@ typedef struct _imvp{
 
 }IMVP;
 
-void lerCaracteres(char str[],int n);
+int buscarCodigo(IPRIMARY *lista, int totalRegistros, char *codigo);
 void cadastrar(IPRIMARY **primaryList, IWINNER **winnerList, IMVP **mvpList);
 
 int main(void){
@@ -162,17 +162,13 @@ int main(void){
                 break;
             default:    
                 printf("Entrada invalida\n");
+                exit(0);
+                break;
         }
 
         scanf("%u",&opcMenu);
     }
 
-
-
-
-
-
-    
     return 0;
 }
 
@@ -205,40 +201,65 @@ void cadastrar(IPRIMARY **primaryList, IWINNER **winnerList, IMVP **mvpList){
     novaPartida.codigo[7] = novaPartida.data[4];
     novaPartida.codigo[8] = '\0';
     
-    totalRegistros = ftell(matchesFile)/MAX_REGISTRO;
+    totalRegistros = ftell(matchesFile) / MAX_REGISTRO;
     
-    *primaryList = (IPRIMARY*)realloc(*primaryList, sizeof(IPRIMARY) * totalRegistros);
-    *winnerList = (IWINNER*)realloc(*winnerList, sizeof(IWINNER) * totalRegistros);
-    *mvpList = (IMVP*)realloc(*mvpList, sizeof(IMVP) * totalRegistros);
+    /* Aloca espaço para a lista dos indices primários */
+    *primaryList = (IPRIMARY*) realloc(*primaryList, sizeof(IPRIMARY) * totalRegistros);
+    /* Aloca espaço para a lista dos times vencedores */
+    *winnerList = (IWINNER*) realloc(*winnerList, sizeof(IWINNER) * totalRegistros);
+    /* Aloca espaço para a lista dos MVPs */
+    *mvpList = (IMVP*) realloc(*mvpList, sizeof(IMVP) * totalRegistros);
 
-    
+    //Percorre a lista de índices procurando pela chave *codigo;
+    if( buscarCodigo(*primaryList, totalRegistros, novaPartida.codigo) != -1){       
 
-    primaryFile = fopen(WINNER_FILE,"a+");
-
-    if(primaryFile == NULL) perror("Erro ao abrir o arquivo \n");
-    else printf("Arquivo aberto para leitura \n");
-    
+        //Insere o novo registro na lista de índices primários.
+        strcpy( *(IPRIMARY)[totalRegistros].codigo, novaPartida.codigo);
+        *(IPRIMARY)[totalRegistros].rrn = ++totalRegistros;
         
+        //Insere o novo registro na lista de títulos.
+        strcpy( *(IWINNER)[totalRegistros - 1].iEquipeVencedora, novaPartida.equipeVencedora);
+        strcpy( *(IWINNER)[totalRegistros - 1].codigo, novaPartida.codigo);
+        
+        //Insere o novo registro na lista de títulos.
+        strcpy( *(IMVP)[totalRegistros - 1].iMVP, novaPartida.apelidoMVP);
+        strcpy( *(IMVP)[totalRegistros - 1].codigo, novaPartida.codigo);
 
-    bytes = fprintf(matchesFile,"%s@%s@%s@%s@%s@%s@%s@%s@%s@",novaPartida.codigo,novaPartida.equipeAzul, novaPartida.equipeVermelha, novaPartida.data, novaPartida.duracao, novaPartida.equipeVencedora, novaPartida.placarAzul,novaPartida.placarVermelha,novaPartida.apelidoMVP);
+
+        primaryFile = fopen(WINNER_FILE,"a+");
+
+        if(primaryFile != NULL) {
+
+            bytes = fprintf(matchesFile,"%s@%s@%s@%s@%s@%s@%s@%s@%s@",
+                                novaPartida.codigo,novaPartida.equipeAzul, 
+                                novaPartida.equipeVermelha, 
+                                novaPartida.data, 
+                                novaPartida.duracao, 
+                                novaPartida.equipeVencedora, 
+                                novaPartida.placarAzul,
+                                novaPartida.placarVermelha,
+                                novaPartida.apelidoMVP);
     
-    printf("bytes: %d",bytes);
+            for(i = 0; i < MAX_REGISTRO - bytes; i++)
+                fprintf(matchesFile, "#");
 
-    for(i = 0; i < MAX_REGISTRO - bytes; i++)
-        fprintf(matchesFile, "#");
-    //printf("\nftell: %ld",ftell(matchesFile));
-
-    fclose(matchesFile);
+            fclose(matchesFile);
+        
+        }
+        
+        ordenarIndices(primario, titulo, autores, *total);
+    }
+    
 }
 
 
 
-/*
-int buscarPorCodigo(iprimary *lista, int total, char *codigo){
+
+int buscarPorCodigo(iprimary *lista, int totalRegistros, char *codigo){
     int i;
     
     //Percorre a lista de índices procurando pela chave *codigo;
-    for(i = 0; i < total; i++){
+    for(i = 0; i < totalRegistros; i++){
         if(!strcmp(lista[i].chave, codigo))
             return lista[i].pos;//Retorna RRN (que pode ser -1, indicando que o resgistro foi apagado).
     }
@@ -246,7 +267,7 @@ int buscarPorCodigo(iprimary *lista, int total, char *codigo){
     //Valor não encontrado.
     return -1;
 }
-*/
+
 
 
 
