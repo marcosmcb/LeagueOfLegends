@@ -86,22 +86,20 @@ typedef struct _imvp{
 
 }IMVP;
 
-int buscarCodigo(IPRIMARY *lista, int totalRegistros, char *codigo);
-void cadastrar(IPRIMARY **primaryList, IWINNER **winnerList, IMVP **mvpList);
+void cadastrar();
 
 int main(void){
 
     unsigned int opcMenu, opcSubMenu;
-    IPRIMARY *primary = NULL;
-    IWINNER *winner = NULL;
-    IMVP *mvp = NULL;
+    
     scanf("%u",&opcMenu);
+
     while(opcMenu > 0 && opcMenu < 8){
-        printf("Valor Menu [%u] \n", opcMenu);
+        //printf("Valor Menu [%u] \n", opcMenu);
         switch(opcMenu){
             case 1:     
                 //cadastrar;
-                cadastrar(&primary, &winner, &mvp);
+                cadastrar();
                 break;
             case 2:
                 //alterar; 
@@ -172,23 +170,30 @@ int main(void){
     return 0;
 }
 
-void cadastrar(IPRIMARY **primaryList, IWINNER **winnerList, IMVP **mvpList){
+void cadastrar(){
     int bytes=0, i = 0,totalRegistros = 0;
     FILE *matchesFile, *primaryFile;
     MATCHE novaPartida;
+
     matchesFile = fopen(DADOS_FILE, "a");
 
-    if(matchesFile == NULL) perror("Erro ao abrir o arquivo \n");
-    else printf("Arquivo aberto para leitura \n");
-
-    scanf("\n%[^\n]s",novaPartida.equipeAzul);
-    scanf("\n%[^\n]s",novaPartida.equipeVermelha);  
-    scanf("\n%[^\n]s",novaPartida.data);
-    scanf("\n%[^\n]s",novaPartida.duracao);
-    scanf("\n%[^\n]s",novaPartida.equipeVencedora);
-    scanf("\n%[^\n]s",novaPartida.placarAzul);
-    scanf("\n%[^\n]s",novaPartida.placarVermelha);  
-    scanf("\n%[^\n]s",novaPartida.apelidoMVP);
+    getchar();
+    scanf("%[^\n]s",novaPartida.equipeAzul);
+    getchar();
+    scanf("%[^\n]s",novaPartida.equipeVermelha);  
+    getchar();
+    scanf("%[^\n]s",novaPartida.data);
+    getchar();
+    scanf("%[^\n]s",novaPartida.duracao);
+    getchar();
+    scanf("%[^\n]s",novaPartida.equipeVencedora);
+    getchar();
+    scanf("%[^\n]s",novaPartida.placarAzul);
+    getchar();
+    scanf("%[^\n]s",novaPartida.placarVermelha); 
+    getchar(); 
+    scanf("%[^\n]s",novaPartida.apelidoMVP);
+    getchar();
 
 
     novaPartida.codigo[0] = novaPartida.equipeAzul[0];
@@ -201,44 +206,27 @@ void cadastrar(IPRIMARY **primaryList, IWINNER **winnerList, IMVP **mvpList){
     novaPartida.codigo[7] = novaPartida.data[4];
     novaPartida.codigo[8] = '\0';
     
+
     totalRegistros = ftell(matchesFile) / MAX_REGISTRO;
-    
-    /* Aloca espaço para a lista dos indices primários */
-    *primaryList = (IPRIMARY*) realloc(*primaryList, sizeof(IPRIMARY) * totalRegistros);
-    /* Aloca espaço para a lista dos times vencedores */
-    *winnerList = (IWINNER*) realloc(*winnerList, sizeof(IWINNER) * totalRegistros);
-    /* Aloca espaço para a lista dos MVPs */
-    *mvpList = (IMVP*) realloc(*mvpList, sizeof(IMVP) * totalRegistros);
+
 
     //Percorre a lista de índices procurando pela chave *codigo;
-    if( buscarCodigo(*primaryList, totalRegistros, novaPartida.codigo) != -1){       
-
-        //Insere o novo registro na lista de índices primários.
-        strcpy( *(IPRIMARY)[totalRegistros].codigo, novaPartida.codigo);
-        *(IPRIMARY)[totalRegistros].rrn = ++totalRegistros;
-        
-        //Insere o novo registro na lista de títulos.
-        strcpy( *(IWINNER)[totalRegistros - 1].iEquipeVencedora, novaPartida.equipeVencedora);
-        strcpy( *(IWINNER)[totalRegistros - 1].codigo, novaPartida.codigo);
-        
-        //Insere o novo registro na lista de títulos.
-        strcpy( *(IMVP)[totalRegistros - 1].iMVP, novaPartida.apelidoMVP);
-        strcpy( *(IMVP)[totalRegistros - 1].codigo, novaPartida.codigo);
+    //if( buscarCodigo(*primaryList, totalRegistros, novaPartida.codigo) != -1){       
 
 
-        primaryFile = fopen(WINNER_FILE,"a+");
 
-        if(primaryFile != NULL) {
 
-            bytes = fprintf(matchesFile,"%s@%s@%s@%s@%s@%s@%s@%s@%s@",
-                                novaPartida.codigo,novaPartida.equipeAzul, 
-                                novaPartida.equipeVermelha, 
-                                novaPartida.data, 
-                                novaPartida.duracao, 
-                                novaPartida.equipeVencedora, 
-                                novaPartida.placarAzul,
-                                novaPartida.placarVermelha,
-                                novaPartida.apelidoMVP);
+        if(matchesFile != NULL) {
+
+            bytes = fprintf(matchesFile,"%s@%s@%s@%s@%s@%s@%s@%s@%s@",novaPartida.codigo,
+                                                                    novaPartida.equipeAzul,
+                                                                    novaPartida.equipeVermelha,
+                                                                    novaPartida.data,
+                                                                    novaPartida.duracao,
+                                                                    novaPartida.equipeVencedora,
+                                                                    novaPartida.placarAzul,
+                                                                    novaPartida.placarVermelha,
+                                                                    novaPartida.apelidoMVP);
     
             for(i = 0; i < MAX_REGISTRO - bytes; i++)
                 fprintf(matchesFile, "#");
@@ -247,26 +235,10 @@ void cadastrar(IPRIMARY **primaryList, IWINNER **winnerList, IMVP **mvpList){
         
         }
         
-        ordenarIndices(primario, titulo, autores, *total);
-    }
+    //}
     
 }
 
-
-
-
-int buscarPorCodigo(iprimary *lista, int totalRegistros, char *codigo){
-    int i;
-    
-    //Percorre a lista de índices procurando pela chave *codigo;
-    for(i = 0; i < totalRegistros; i++){
-        if(!strcmp(lista[i].chave, codigo))
-            return lista[i].pos;//Retorna RRN (que pode ser -1, indicando que o resgistro foi apagado).
-    }
-    
-    //Valor não encontrado.
-    return -1;
-}
 
 
 
