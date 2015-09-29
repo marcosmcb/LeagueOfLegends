@@ -102,12 +102,24 @@ void carregarIndicePrimario(IPRIMARY **listaIndicePrimario, int *totalRegistros)
 void carregarIndiceMVP(IMVP **listaIndiceMVP, int *totalRegistros);
 void carregarIndiceWinner(IWINNER **listaIndiceWinner, int *totalRegistros);
 
+int compararIndicePrimario(const void *str1, const void *str2);
+int compararIndiceMVP(const void *str1, const void *str2);
+int compararIndiceWinner(const void *str1, const void *str2);
+
+void imprimirBuscaCodigo(int rrnCodigo, char *codigo);
+
 void listarPorCodigo(IPRIMARY **listaIndicePrimario, int *totalRegistros);
 void listarPorMVP(IMVP **listaIndiceMVP, int *totalRegistros);
 void listarPorWinner (IWINNER **listaIndiceWinner, int *totalRegistros);
 
+void ordenarIndicePrimario(IPRIMARY **listaIndicePrimario, int totalRegistros);
+void ordenarIndiceMVP(IMVP **listaIndiceMVP, int totalRegistros);
+void ordenarIndiceWinner(IWINNER **listaIndiceWinner, int totalRegistros);
+
 int main(void){
 	int opcMenu, opcSubMenu, totalRegistros;
+    int resultadoBuscaCodigo;
+    char strBuscaCodigo[39];
 	FILE *dataFile;
     IPRIMARY *listaIndicePrimario = NULL;
     IWINNER *listaIndiceWinner = NULL;
@@ -116,7 +128,7 @@ int main(void){
 
     dataFile = fopen(DADOS_FILE,"a");
     totalRegistros = (int) ( ftell(dataFile) / MAX_REGISTRO );
-    printf("Valor de FTELL [%d]\n", ftell(dataFile) );
+    //printf("Valor de FTELL [%d]\n", ftell(dataFile) );
     fclose(dataFile);
 
     carregarIndicePrimario(&listaIndicePrimario, &totalRegistros);
@@ -149,9 +161,20 @@ int main(void){
 
                 switch(opcSubMenu){
 
-
                     case 1:  
-                        //buscaPorCodigo   
+                        //buscaPorCodigo
+                        getchar();
+                        scanf("%[^\n]",strBuscaCodigo); 
+                        getchar(); 
+                        puts(strBuscaCodigo);
+                        resultadoBuscaCodigo = buscarCodigoIndicePrimario(listaIndicePrimario, totalRegistros, strBuscaCodigo);
+                        
+                        if(resultadoBuscaCodigo == -1){
+                            printf("Registro não encontrado!\n");
+                        }else{
+                            imprimirBuscaCodigo(resultadoBuscaCodigo, strBuscaCodigo);
+                        }
+
                         break;
                     case 2:  
                         //buscaPorNomeEquipeVencedora   
@@ -193,7 +216,10 @@ int main(void){
             case 6:     
                 //liberar;
                 break;
-            case 7:     
+            case 7:
+                //free(listaIndicePrimario);
+                //free(listaIndiceMVP);
+                //free(listaIndiceWinner);
                 exit(0);
                 break;
             default:    
@@ -340,7 +366,6 @@ void cadastrarRegistro(IPRIMARY **listaIndicePrimario, IMVP **listaIndiceMVP, IW
 
             fclose(matchesFile);
         }
-        
 	}
 
 }
@@ -428,23 +453,56 @@ void carregarIndiceWinner(IWINNER **listaIndiceWinner, int *totalRegistros){
 }
 
 //------------------------------------------------------------------------------------------------------------------------
-int compararAutor(const void *str1, const void *str2){
-    return strcmp(((iauthor*)str1)->autor, ((iauthor*)str2)->autor);
+int compararIndicePrimario(const void *str1, const void *str2){
+    return strcmp( ((IPRIMARY*)str1)->codigo, ((IPRIMARY*)str2)->codigo);
 }
 
 //------------------------------------------------------------------------------------------------------------------------
-int compararTitulo(const void *str1, const void *str2){
-    return strcmp(((ititle*)str1)->tituloPortugues, ((ititle*)str2)->tituloPortugues);
+int compararIndiceMVP(const void *str1, const void *str2){
+    return strcmp(((IMVP*)str1)->iMVP, ((IMVP*)str2)->iMVP);
 }
 
 //------------------------------------------------------------------------------------------------------------------------
-int compararPrimario(const void *str1, const void *str2){
-    return strcmp(((iprimary*)str1)->chave, ((iprimary*)str2)->chave);
+int compararIndiceWinner(const void *str1, const void *str2){
+    return strcmp(((IWINNER*)str1)->iEquipeVencedora, ((IWINNER*)str2)->iEquipeVencedora);
 }
+
+void imprimirBuscaCodigo(int rrnCodigo, char *codigo){
+    FILE *dataFile;
+    char auxStr[MAX_REGISTRO], *tokenAux;
+
+    dataFile = fopen(DADOS_FILE,"r");
+
+    fseek(dataFile, rrnCodigo*MAX_REGISTRO, SEEK_SET);
+
+    fgets(auxStr,MAX_REGISTRO,dataFile);
+
+    tokenAux = strtok(auxStr,"@");
+    printf("%s\n", tokenAux);
+    tokenAux = strtok(NULL,"@");
+    printf("%s\n", tokenAux);
+    tokenAux = strtok(NULL,"@");
+    printf("%s\n", tokenAux);
+    tokenAux = strtok(NULL,"@");
+    printf("%s\n", tokenAux);
+    tokenAux = strtok(NULL,"@");
+    printf("%s\n", tokenAux);
+    tokenAux = strtok(NULL,"@");
+    printf("%s\n", tokenAux);
+    tokenAux = strtok(NULL,"@");
+    printf("%s\n", tokenAux);
+    tokenAux = strtok(NULL,"@");
+    printf("%s\n", tokenAux);
+    tokenAux = strtok(NULL,"@");
+    printf("%s\n", tokenAux);
+
+
+}
+
 
 void listarPorCodigo(IPRIMARY **listaIndicePrimario, int *totalRegistros){
     int i=0;
-
+    ordenarIndicePrimario(listaIndicePrimario, *totalRegistros);
     printf("IMPRESSAO DAS LISTAS de chave PRIMARIA\n");
     for ( ; i < *totalRegistros; i++)
         printf("Chave Primaria[%d] --- Codigo[%s] com RRN[%d] \n", i+1, (*listaIndicePrimario + i)->codigo, (*listaIndicePrimario + i)->rrn);
@@ -452,7 +510,7 @@ void listarPorCodigo(IPRIMARY **listaIndicePrimario, int *totalRegistros){
 
 void listarPorMVP(IMVP **listaIndiceMVP, int *totalRegistros){
     int i=0;
-
+    ordenarIndiceMVP(listaIndiceMVP, *totalRegistros);
     printf("IMPRESSAO DAS LISTAS de MVP \n");
     for ( ; i < *totalRegistros; i++)
         printf("Chave MVP[%d] --- MVP[%s] com Codigo[%s] \n", i+1, (*listaIndiceMVP + i)->iMVP, (*listaIndiceMVP + i)->codigo);
@@ -460,15 +518,20 @@ void listarPorMVP(IMVP **listaIndiceMVP, int *totalRegistros){
 
 void listarPorWinner(IWINNER **listaIndiceWinner, int *totalRegistros){
     int i = 0;
-
+    ordenarIndiceWinner(listaIndiceWinner, *totalRegistros);
     printf("IMPRESSAO DAS LISTAS de Winner \n");
     for ( ; i < *totalRegistros; i++)
         printf("Chave Winner[%d] --- Winner[%s] com Codigo[%s] \n", i+1, (*listaIndiceWinner + i)->iEquipeVencedora, (*listaIndiceWinner + i)->codigo);
 }
 
 //------------------------------------------------------------------------------------------------------------------------
-void ordenarIndices(iprimary **primario, ititle **titulo, iauthor **autor, int total){
-    qsort(*primario, total, sizeof(iprimary), compararPrimario);
-    qsort(*autor, total, sizeof(iauthor), compararAutor);
-    qsort(*titulo, total, sizeof(ititle), compararTitulo);
+void ordenarIndicePrimario(IPRIMARY **listaIndicePrimario, int totalRegistros){
+    qsort(*listaIndicePrimario, totalRegistros, sizeof(IPRIMARY), compararIndicePrimario);
+}
+
+void ordenarIndiceMVP(IMVP **listaIndiceMVP, int totalRegistros){
+    qsort(*listaIndiceMVP, totalRegistros, sizeof(IMVP), compararIndiceMVP);
+}
+void ordenarIndiceWinner(IWINNER **listaIndiceWinner, int totalRegistros){
+    qsort(*listaIndiceWinner, totalRegistros, sizeof(IWINNER), compararIndiceWinner);
 }
