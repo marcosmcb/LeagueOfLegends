@@ -1,0 +1,2 @@
+#!/bin/bash
+make clean && make && ./main < arquivosDeTeste/cadastro1OK.in > saidaTestes/saidaCadastro1OK.out && ./main < arquivosDeTeste/cadastro2ER.in > saidaTestes/saidaCadastro2ER.out && ./main < arquivosDeTeste/cadastro3ER.in > saidaTestes/saidaCadastro3ER.out && ./main < arquivosDeTeste/listagem1OK.in > saidaTestes/saidaListagem1OK.out && ./main < arquivosDeTeste/alterar1OK.in > saidaTestes/saidaAlterar1OK.out && ./main < arquivosDeTeste/alterar2ER.in > saidaTestes/saidaAlterar2ER.out && ./main < arquivosDeTeste/remocao1OK.in > saidaTestes/remocao1OK.out
