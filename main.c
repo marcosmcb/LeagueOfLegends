@@ -47,16 +47,25 @@ arquivos de  ́ındices no disco a partir das estruturas da memória principal
 ********************************************/
 
 
+<<<<<<< HEAD
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+=======
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+>>>>>>> bbf94349f6b4722910c083cd8d269ac2a8c9c428
 
 #define DADOS_FILE "teste.dat"
 #define PRIMARY_FILE "iprimary.idx"
 #define WINNER_FILE "iwinner.idx"
 #define MVP_FILE "imvp.idx"
 #define MAX_REGISTRO 192
+<<<<<<< HEAD
 #define MAX_INDICE 50
+=======
+>>>>>>> bbf94349f6b4722910c083cd8d269ac2a8c9c428
 
 typedef struct _matche{
     
@@ -87,6 +96,7 @@ typedef struct _imvp{
 
 }IMVP;
 
+<<<<<<< HEAD
 //int buscarCodigoIndicePrimario();
 /*
 void ordenarIndicePrimario();
@@ -145,6 +155,24 @@ int main(void){
             case 1:     
                 //cadastrar;
                 cadastrarRegistro(&listaIndicePrimario, &listaIndiceMVP, &listaIndiceWinner, &totalRegistros);
+=======
+void lerCaracteres(char str[],int n);
+void cadastrar(IPRIMARY **primaryList, IWINNER **winnerList, IMVP **mvpList);
+
+int main(void){
+
+	unsigned int opcMenu, opcSubMenu;
+	IPRIMARY *primary = NULL;
+	IWINNER *winner = NULL;
+	IMVP *mvp = NULL;
+    scanf("%u",&opcMenu);
+    while(opcMenu > 0 && opcMenu < 8){
+        printf("Valor Menu [%u] \n", opcMenu);
+        switch(opcMenu){
+            case 1:     
+                //cadastrar;
+                cadastrar(&primary, &winner, &mvp);
+>>>>>>> bbf94349f6b4722910c083cd8d269ac2a8c9c428
                 break;
             case 2:
                 //alterar; 
@@ -156,6 +184,7 @@ int main(void){
             case 4:     
                 //buscas;
                 printf("Submenu\n");
+<<<<<<< HEAD
                 scanf("%d",&opcSubMenu);
                 printf("Valor SubMenu [%d] \n", opcSubMenu);
 
@@ -175,6 +204,16 @@ int main(void){
                             imprimirBuscaCodigo(resultadoBuscaCodigo, strBuscaCodigo);
                         }
 
+=======
+                scanf("%u",&opcSubMenu);
+                printf("Valor SubMenu [%u] \n", opcSubMenu);
+
+                switch(opcSubMenu){
+
+
+                    case 1:  
+                        //buscaPorCodigo   
+>>>>>>> bbf94349f6b4722910c083cd8d269ac2a8c9c428
                         break;
                     case 2:  
                         //buscaPorNomeEquipeVencedora   
@@ -189,6 +228,7 @@ int main(void){
             case 5:     
                 //listagem;
                 printf("Submenu\n");
+<<<<<<< HEAD
                 scanf("%d",&opcSubMenu);
                 printf("Valor SubMenu [%d] \n", opcSubMenu);
 
@@ -209,6 +249,23 @@ int main(void){
                     default: 
                         printf("Entrada invalida\n");
                         break;
+=======
+                scanf("%u",&opcSubMenu);
+                printf("Valor SubMenu [%u] \n", opcSubMenu);
+
+                switch(opcSubMenu){
+                    printf("Valor SubMenu [%u] \n", opcSubMenu);
+                    case 1:  
+                        //buscaPorCodigo   
+                        break;
+                    case 2:  
+                        //buscaPorNomeEquipeVencedora   
+                        break;
+                    case 3:  
+                        //buscaPorMVP   
+                        break;
+                    default: printf("Entrada invalida\n");
+>>>>>>> bbf94349f6b4722910c083cd8d269ac2a8c9c428
                 }
 
 
@@ -216,6 +273,7 @@ int main(void){
             case 6:     
                 //liberar;
                 break;
+<<<<<<< HEAD
             case 7:
                 //free(listaIndicePrimario);
                 //free(listaIndiceMVP);
@@ -228,6 +286,17 @@ int main(void){
         }
 
     }while(opcMenu > 0 && opcMenu < 7);
+=======
+            case 7:     
+				return 0;
+                break;
+            default:    
+                printf("Entrada invalida\n");
+        }
+
+        scanf("%u",&opcMenu);
+    }
+>>>>>>> bbf94349f6b4722910c083cd8d269ac2a8c9c428
 
 
 
@@ -238,6 +307,7 @@ int main(void){
 	return 0;
 }
 
+<<<<<<< HEAD
 int buscarCodigoIndicePrimario(IPRIMARY *listaIndicePrimario, int totalRegistros, char *codigo){
     int i=0;
 
@@ -287,6 +357,26 @@ void cadastrarRegistro(IPRIMARY **listaIndicePrimario, IMVP **listaIndiceMVP, IW
     scanf("%[^\n]",novaPartida.apelidoMVP); 
     getchar();
     //puts(novaPartida.apelidoMVP);
+=======
+void cadastrar(IPRIMARY **primaryList, IWINNER **winnerList, IMVP **mvpList){
+	int bytes=0, i = 0,totalRegistros = 0;
+    FILE *matchesFile, *primaryFile;
+    MATCHE novaPartida;
+    matchesFile = fopen(DADOS_FILE, "a");
+
+    if(matchesFile == NULL) perror("Erro ao abrir o arquivo \n");
+    else printf("Arquivo aberto para leitura \n");
+
+	scanf("\n%[^\n]s",novaPartida.equipeAzul);
+	scanf("\n%[^\n]s",novaPartida.equipeVermelha);	
+	scanf("\n%[^\n]s",novaPartida.data);
+	scanf("\n%[^\n]s",novaPartida.duracao);
+	scanf("\n%[^\n]s",novaPartida.equipeVencedora);
+	scanf("\n%[^\n]s",novaPartida.placarAzul);
+	scanf("\n%[^\n]s",novaPartida.placarVermelha);	
+	scanf("\n%[^\n]s",novaPartida.apelidoMVP);
+
+>>>>>>> bbf94349f6b4722910c083cd8d269ac2a8c9c428
 
     novaPartida.codigo[0] = novaPartida.equipeAzul[0];
     novaPartida.codigo[1] = novaPartida.equipeVermelha[0];
@@ -297,6 +387,7 @@ void cadastrarRegistro(IPRIMARY **listaIndicePrimario, IMVP **listaIndiceMVP, IW
     novaPartida.codigo[6] = novaPartida.data[3];
     novaPartida.codigo[7] = novaPartida.data[4];
     novaPartida.codigo[8] = '\0';
+<<<<<<< HEAD
 
     //puts(novaPartida.codigo);
 
